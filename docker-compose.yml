@@ -1,0 +1,15 @@
+﻿version: '3.4'
+
+services:
+  api-one:
+    build:
+      context: .
+      dockerfile: DockerDebug101/Dockerfile
+    ports:
+      - "4321:80"
+  api-two:
+    build:
+      context: .
+      dockerfile: DockerDebug101.Another/Dockerfile
+    ports:
+      - "4331:80"

@@ -1,0 +1,15 @@
+﻿FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine AS build
+WORKDIR /src
+COPY ["DockerDebug101.Another/DockerDebug101.Another.csproj", "DockerDebug101.Another/"]
+RUN dotnet restore "DockerDebug101.Another/DockerDebug101.Another.csproj"
+COPY . .
+WORKDIR "/src/DockerDebug101.Another"
+RUN dotnet build "DockerDebug101.Another.csproj" -c Release -o /app/build
+RUN dotnet publish "DockerDebug101.Another.csproj" -c Release -o /app/publish
+
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS final
+WORKDIR /app
+EXPOSE 80
+EXPOSE 443
+COPY --from=build /app/publish .
+ENTRYPOINT ["dotnet", "DockerDebug101.Another.dll"]
